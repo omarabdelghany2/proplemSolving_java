@@ -1,0 +1,91 @@
+/*
+    steps to create a User:
+    -------------------------------
+        1- @override the method userDetailsService and make it a @Bean
+            UserDetailsService is used to retrieve users from database
+        2- create the required user inside as shown of type UserDetails
+        3- return new InMemoryUserDetailsManager(user1,user2,......userN);
+            as it is the class of interest that implement USerDetailsService interface.
+            ----> if you try now run project you get Exception of "There is no PasswordEncoder mapped for the id "null" ??????????!!!!
+            ----> next is how to solve this
+        4- create class PasswordConfig to add password Encryptor act like @Configuration
+        5- make @Bean method that return the required PasswordEncoder
+        6- return the required encoder "BCryptPasswordEncoder"
+        7- inject passwordEncoder in our class "ApplicationSecurityConfig" and make it @Autowired
+        8- make a constructor for it.
+
+
+    Authentication using User Roles:
+    -------------------------------
+    
+    1- create ENUM Permissions with required roles (ADMIN , STUDENT)
+    2- create ENUM Roles with each role assigned it's Permissions
+    3- assign the role to the User while it's creation.
+    4- limit the api to the required user in  :
+        .antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+    
+    
+      Authentication using User Perimissions:
+      -------------------------------
+
+      1- add antMachers as follow :
+ //               .antMatchers(HttpMethod.DELETE,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+ //               .antMatchers(HttpMethod.POST,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+ //              .antMatchers(HttpMethod.PUT,"/management/api/v1").hasAuthority(COURSE_WRITE.name())
+
+      2- lw bseet fe .roles() w ent btcreate el user htla2i en elmethod de
+      btbuild List<GrantedAuthorities> w btzwd fla5r ROLE_RoleName
+      f e7na 3izen el list de ykon feha el permissions
+      f hnb3ml implement l helper method esmha getGrantedAuthorities lko user :
+                public Set<SimpleGrantedAuthority> getGrantedAuthorirties(){
+                    //this method is used to build set<SimpleGrantedAuthority> for each Role
+
+                    //1-build the required set
+                    Set<SimpleGrantedAuthority> authorities =
+                            permissions.stream()
+                            .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                            .collect(Collectors.toSet());
+                    //2-Add ROLE_ + role Name
+                    authorities.add(new SimpleGrantedAuthority("ROLE_"+this.name()));
+                    //return authorities
+
+                    //kda ent k2nk 3mlt .roles() bta3t el USER bnfsk
+                    return authorities;
+                }
+
+      3- replace .roles() with .authorities(ROLENAME.getGrantedAuthorities())
+        wbkda kol user m3ah el authorities bta3to w n2dr ntcheck fe .antMatchers
+
+    
+    
+    
+    */
+
+Section 6 :Form Based Authentication:
+-----------------------------
+1- change httpBasic() into formLogin()  --done
+2- now sessionId can be found in inspect-->Application-->cookies
+3- .loginPage("/login")
+4- now you need to add thymeleaf dependency and templates/login.html in resources folder
+5- you need to make a controller to direct you to your login page.
+6- you will need to permitAll for login page
+
+7- copy the html of actual login page of spring boot and paste it in your own login page
+
+8- we need to make a default link after login success using defaultSuccessUrl("url here",true)
+
+9-add remember me in config and checkbox in html file
+10- check for it in  inspect-->Network-->login file request
+11- to add your period for token validity
+    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(21))
+    .key("somethingverysecure");
+12- apply logout to configuration to be a GET request bec we disabled CSRF
+    .logoutUrl("/logout")
+    .logoutRequestMatcher(new AntPathMatcher("/logout","GET"))
+    .clearAuthentication(true)
+    .invalidateHttpSession(true)
+    .deleteCookies("JSESSIONID","remember-me")
+    .logoutSuccessUrl("/login");
+13- create a logout button
+14- change names for username and password and remember-me in form
+--------------------------------------------------------------------------------
