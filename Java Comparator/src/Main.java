@@ -1,16 +1,11 @@
 import java.util.*;
 
 // Write your Checker class here
-
-
-
-
 class Main {
 
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         int n = scan.nextInt();
-
         Player[] player = new Player[n];
         Checker checker = new Checker();
 
