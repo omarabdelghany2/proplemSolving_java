@@ -1,6 +1,6 @@
 import java.util.*;
 
-// Write your Checker class here
+
 class Main {
 
     public static void main(String[] args) {
