@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
         HashMap myMap=new HashMap<String, Boolean>();
-        System.out.println(canConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef",new String[]{"ef","eef","eee","eeee","eeeee","eeeeee"},myMap));
+        System.out.println(canConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef",new String[]{"e","ee","eee","eeee","eeeee","eeeeee"},myMap));
     }
 
     public static boolean canConstruct(String target,String[]wordBank,HashMap<String,Boolean> memo){
